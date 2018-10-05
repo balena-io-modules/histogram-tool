@@ -2,7 +2,8 @@
   "name": "percentile-monitor",
   "version": "1.0.0",
   "description": "perform actions when more than x events in a time series are above the (100-x)th percentile in the configured percentile distribution",
-  "main": "build/index.js",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
     "test": "mocha --exit -r ts-node/register test/*.spec.ts",
     "build": "npx tsc"
