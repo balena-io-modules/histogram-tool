@@ -42,7 +42,13 @@ class PercentileReactor {
         // compare bin percentages with the percentile they represent
         for (let i = 0; i < this.percentiles.list.length; i++) {
             let reactionList;
-            if (hist.bins[i] >= this.percentiles.list[i].p) {
+            // by default, an empty histogram means no requests, so we're
+            // meeting the SLA if that happens (otherwise, we pass when
+            // the percentage of requests less than the given percentile (the
+            // value in the bin after makeCumulative().normalize()) is greater
+            // or equal to the percentile's definition (eg. 0.9))
+            if (hist.total === 0 ||
+                hist.bins[i] >= this.percentiles.list[i].p) {
                 reactionList = this.passReactions;
             }
             else {
