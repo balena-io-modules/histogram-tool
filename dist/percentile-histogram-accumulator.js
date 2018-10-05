@@ -29,7 +29,6 @@ class PercentileHistogramAccumulator {
     // stop the callback interval
     stop() {
         if (this.interval !== undefined) {
-            console.error('clearing interval');
             clearInterval(this.interval);
         }
     }
