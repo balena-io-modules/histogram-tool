@@ -1,0 +1,33 @@
+{
+  "name": "percentile-monitor",
+  "version": "1.0.0",
+  "description": "perform actions when more than x events in a time series are above the (100-x)th percentile in the configured percentile distribution",
+  "main": "build/index.js",
+  "scripts": {
+    "test": "mocha --exit -r ts-node/register test/*.spec.ts",
+    "build": "npx tsc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/resin-io-modules/percentile-monitor.git"
+  },
+  "keywords": [
+    "time-series"
+  ],
+  "author": "dt-rush <nickp@resin.io>",
+  "bugs": {
+    "url": "https://github.com/resin-io-modules/percentile-monitor/issues"
+  },
+  "homepage": "https://github.com/resin-io-modules/percentile-monitor#readme",
+  "devDependencies": {
+    "@types/chai": "^4.1.6",
+    "@types/mocha": "^5.2.5",
+    "@types/node": "^10.11.3",
+    "chai": "^4.2.0",
+    "mocha": "^5.2.0"
+  },
+  "dependencies": {
+    "ts-node": "^7.0.1",
+    "typescript": "^3.1.1"
+  }
+}
