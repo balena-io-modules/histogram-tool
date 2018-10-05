@@ -61,7 +61,11 @@ export class PercentileHistogram {
 		for (let i = 0; i < this.bins.length; i++) {
 			this.bins[i] = this.bins[i] / this.total;
 		}
-		this.total = 1.0;
+		// we want to preserve total === 0 if it is 0, so that
+		// anything processing this histogram can know it's empty
+		if (this.total > 0) {
+			this.total = 1.0;
+		}
 		return this;
 	}
 }

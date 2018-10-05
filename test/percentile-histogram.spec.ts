@@ -15,7 +15,6 @@ const percentiles = {
 describe('PercentileHistogram', () => {
 
 	it('should add data points to the right bins', () => {
-		// set up the histogram
 		const hist = new PercentileHistogram(percentiles);
 		// add sample points and check which bins they fall in
 		hist.addSamplePoint(3);
@@ -35,7 +34,6 @@ describe('PercentileHistogram', () => {
 	});
 
 	it('should make cumulative properly', () => {
-		// set up the histogram
 		const hist = new PercentileHistogram(percentiles);
 		// bin 0
 		hist.addSamplePoint(3);
@@ -60,7 +58,6 @@ describe('PercentileHistogram', () => {
 	});
 
 	it('should normalize properly', () => {
-		// set up the histogram
 		const hist = new PercentileHistogram(percentiles);
 		// bin 0
 		hist.addSamplePoint(1);
@@ -70,6 +67,12 @@ describe('PercentileHistogram', () => {
 		hist.normalize();
 		expect(hist.bins[0]).to.equal(0.5);
 		expect(hist.bins[3]).to.equal(0.5);
+	});
+
+	it('makeCumulative().normalize() should have total 0 if empty', () => {
+		const hist = new PercentileHistogram(percentiles);
+		hist.makeCumulative().normalize();
+		expect(hist.total).to.equal(0);
 	});
 
 });

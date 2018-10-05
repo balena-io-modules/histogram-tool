@@ -1,5 +1,6 @@
 import { PercentileHistogramAccumulator } from '../src/percentile-histogram-accumulator';
 import { PercentileReactor } from '../src/percentile-reactor';
+import { PercentileHistogram } from '../src/percentile-histogram';
 
 import { expect } from 'chai';
 import 'mocha';
@@ -19,7 +20,7 @@ const t = 0.1;
 
 describe('PercentileReactor', () => {
 
-	it('should fail a failing percentile', (done) => {
+	it('should fail a failing distribution', (done) => {
 		new Promise((resolve, reject) => {
 			let pHistAccum = new PercentileHistogramAccumulator(t, percentiles);
 			let pReactor = new PercentileReactor(percentiles);
@@ -43,8 +44,7 @@ describe('PercentileReactor', () => {
 		}).then(done).catch(done);
 	});
 		
-
-	it('should pass a passing percentile', (done) => {
+	it('should pass a passing distribution', (done) => {
 		new Promise((resolve, reject) => {
 			let pHistAccum = new PercentileHistogramAccumulator(t, percentiles);
 			let pReactor = new PercentileReactor(percentiles);
@@ -66,6 +66,42 @@ describe('PercentileReactor', () => {
 				reject(new Error('failed to call pass callback'));
 			}, t * 1.5 * 1000);
 		}).then(done).catch(done);
+	});
+
+	it('should pass an empty distribution', (done) => {
+		new Promise((resolve, reject) => {
+			let pHistAccum = new PercentileHistogramAccumulator(t, percentiles);
+			let pReactor = new PercentileReactor(percentiles);
+			pHistAccum.start();
+			pHistAccum.onWindowEnd((hist) => {
+				pReactor.reactToHistogram(hist);
+				pHistAccum.stop();
+			});
+			pReactor.addPassReaction(percentiles.list[0].p, () => {
+				resolve();
+			});
+			setTimeout(() => {
+				reject(new Error('failed to call pass callback'));
+			}, t * 1.5 * 1000);
+		}).then(done).catch(done);
+	});
+
+	it('should throw error if percentile spec different', () => {
+		try {
+			let pReactor = new PercentileReactor(percentiles);
+			let otherPercentiles = {
+				id: 'other',
+				list: [
+					{ p: 0.9, x: 50 }
+				]
+			};
+			let hist = new PercentileHistogram(otherPercentiles);
+			pReactor.reactToHistogram(hist);
+			throw new Error('did not throw error when reacting to histogram ' +
+				'constructed with different PercentileSpec');
+		} catch (err) {
+			// this should happen
+		}
 	});
 
 });
