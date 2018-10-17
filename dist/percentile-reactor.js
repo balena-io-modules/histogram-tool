@@ -25,7 +25,7 @@ class PercentileReactor {
     addPassReaction(percentile, f) {
         this.addReaction(this.passReactions, percentile, f);
     }
-    // check if a histogram violates the SLA defined by the `percentiles` object
+    // check if a histogram violates the SLO defined by the `percentiles` object
     // used to construct this PercentileReactor, taking actions defined in 
     // `this.reactions` if so
     reactToHistogram(hist) {
@@ -43,7 +43,7 @@ class PercentileReactor {
         for (let i = 0; i < this.percentiles.list.length; i++) {
             let reactionList;
             // by default, an empty histogram means no requests, so we're
-            // meeting the SLA if that happens (otherwise, we pass when
+            // meeting the SLO if that happens (otherwise, we pass when
             // the percentage of requests less than the given percentile (the
             // value in the bin after makeCumulative().normalize()) is greater
             // or equal to the percentile's definition (eg. 0.9))

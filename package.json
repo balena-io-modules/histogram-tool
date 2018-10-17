@@ -28,6 +28,7 @@
     "mocha": "^5.2.0"
   },
   "dependencies": {
+    "hdr-histogram-js": "^1.1.4",
     "ts-node": "^7.0.1",
     "typescript": "^3.1.1"
   }

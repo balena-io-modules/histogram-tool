@@ -32,7 +32,7 @@ class PercentileHistogramAccumulator {
             clearInterval(this.interval);
         }
     }
-    // clear the interval, clear the histogram
+    // clear the histogram
     clear() {
         this.hist.clear();
     }

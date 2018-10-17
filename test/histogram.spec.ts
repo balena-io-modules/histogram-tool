@@ -1,4 +1,4 @@
-import { PercentileHistogram } from '../src/percentile-histogram';
+import { Histogram } from '../src/histogram';
 
 import { expect } from 'chai';
 import 'mocha';
@@ -12,10 +12,10 @@ const percentiles = {
 	]
 };
 
-describe('PercentileHistogram', () => {
+describe('Histogram', () => {
 
 	it('should add data points to the right bins', () => {
-		const hist = new PercentileHistogram(percentiles);
+		const hist = new Histogram(percentiles);
 		// add sample points and check which bins they fall in
 		hist.addSamplePoint(3);
 		expect(hist.bins[0]).to.equal(1);
@@ -34,7 +34,7 @@ describe('PercentileHistogram', () => {
 	});
 
 	it('should make cumulative properly', () => {
-		const hist = new PercentileHistogram(percentiles);
+		let hist = new Histogram(percentiles);
 		// bin 0
 		hist.addSamplePoint(3);
 		// bin 1
@@ -50,7 +50,7 @@ describe('PercentileHistogram', () => {
 		hist.addSamplePoint(1000);
 		hist.addSamplePoint(30000);
 		// make cumulative and check
-		hist.makeCumulative();
+		hist = hist.cumulative();
 		expect(hist.bins[0]).to.equal(1);
 		expect(hist.bins[1]).to.equal(3);
 		expect(hist.bins[2]).to.equal(6);
@@ -58,20 +58,20 @@ describe('PercentileHistogram', () => {
 	});
 
 	it('should normalize properly', () => {
-		const hist = new PercentileHistogram(percentiles);
+		let hist = new Histogram(percentiles);
 		// bin 0
 		hist.addSamplePoint(1);
 		// bin 3
 		hist.addSamplePoint(1000);
 		// normalize and check
-		hist.normalize();
+		hist = hist.normalized();
 		expect(hist.bins[0]).to.equal(0.5);
 		expect(hist.bins[3]).to.equal(0.5);
 	});
 
 	it('makeCumulative().normalize() should have total 0 if empty', () => {
-		const hist = new PercentileHistogram(percentiles);
-		hist.makeCumulative().normalize();
+		let hist = new Histogram(percentiles);
+		hist = hist.cumulative().normalized();
 		expect(hist.total).to.equal(0);
 	});
 

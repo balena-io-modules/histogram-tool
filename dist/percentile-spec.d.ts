@@ -1,8 +1,12 @@
+import { BinSpec } from './bin-spec';
 export interface Percentile {
     p: number;
     x: number;
 }
-export interface PercentileSpec {
+export declare class PercentileSpec {
     id: string;
     list: Percentile[];
+    constructor(id: string, list: Percentile[]);
+    toBinSpec(): BinSpec;
 }
+export declare function generateLogPercentileSpec(r: number, n: number): PercentileSpec;
