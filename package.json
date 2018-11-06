@@ -31,6 +31,8 @@
     "@types/promise.prototype.finally": "^2.0.2",
     "hdr-histogram-js": "^1.1.4",
     "object-sizeof": "^1.2.0",
+    "pg": "^7.6.0",
+    "pg-format": "^1.0.4",
     "promise.prototype.finally": "^3.1.0",
     "ts-node": "^7.0.1",
     "typescript": "^3.1.1"

@@ -22,10 +22,12 @@ export class Histogram {
 	isCumulative : boolean
 	isNormalized : boolean
 
-	constructor (spec : BinSpec) {
-		// sort BinSpec.list just in case and (needed for proper data insertion)
-		spec.list.sort((a, b) => a.x - b.x);
-		this.spec = spec;
+	// can take either a BinSpec or a number[] representing right endpoints
+	// for bins
+	constructor (spec : BinSpec | number[]) {
+		// handle type union for `spec` param (idempotent if argument is already
+		// of Binspec type)
+		this.spec = BinSpec.fromBuckets(spec);
 		this.clear();
 		this.isCumulative = false;
 		this.isNormalized = false;

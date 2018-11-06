@@ -10,22 +10,15 @@ export class BinSpec {
 		this.id = id;
 		this.list = list;
 	}
-}
-
-export function binSpecFromBuckets (buckets : number[]) : BinSpec {
-	buckets.sort();
-	return new BinSpec(`fromBuckets-${buckets}`, buckets.map(x => ({ x })));
-}
-
-export function generateLogBinSpec (r : number, n : number) : BinSpec {
-	let spec = {
-		id: `generated-r-${r}-n-${n}`,
-		list: [],
-	};
-	for (let i = 1; i < n; i++) {
-		spec.list[i - 1] = {
-			x: Math.pow(r, i),
-		};
+	// used to allow functions to take either an existing BinSpec or simply
+	// a list of bucket endpoints (number[]), for example, the Histogram 
+	// constructor
+	static fromBuckets (buckets : number[] | BinSpec) : BinSpec {
+		if (buckets instanceof BinSpec) {
+			return buckets;
+		}
+		// NB: typescript sort defaults to lexicographic, so we have to be specific
+		buckets.sort((a, b) => a - b);
+		return new BinSpec(`fromBuckets-${buckets}`, buckets.map(x => ({ x })));
 	}
-	return spec;
 }

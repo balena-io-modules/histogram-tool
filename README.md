@@ -31,19 +31,13 @@ load shed or not to load shed (*that is the question*))
 1. build histograms of data points (such as latencies) which fall in ranges
 	defined by cutoff points of interest (most often, these will be the cutoff
 	values of the percentiles of an expected distribution (the actual proportions
-	of the histogram bins may or may not match the expected distribution))
+	of the histogram bins may or may not match the expected distribution)) (`Histogram`)
 
-  (`Histogram`)
-
-2. build a series of such histograms in time windows
-
-  (`HistogramAccumulator`)
+2. build a series of such histograms in time windows (`HistogramTimeSeries`)
 
 3. react to the observed percentiles either matching or not matching what is 
 	expected (if the percentile distribution given tracks SLO's, this means
-	determining whether the SLO is passing or failing for each given percentile)
-
-  (`SLOReactor`)
+	determining whether the SLO is passing or failing for each given percentile) (`SLOReactor`)
 
 ### Usage
 

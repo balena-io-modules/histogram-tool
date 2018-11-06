@@ -5,7 +5,7 @@ export declare class Histogram {
     total: number;
     isCumulative: boolean;
     isNormalized: boolean;
-    constructor(spec: BinSpec);
+    constructor(spec: BinSpec | number[]);
     addSamplePoint(x: number): void;
     clear(): void;
     clone(): Histogram;

@@ -5,5 +5,5 @@ export declare class BinSpec {
     id: string;
     list: Bin[];
     constructor(id: string, list: Bin[]);
+    static fromBuckets(buckets: number[] | BinSpec): BinSpec;
 }
-export declare function generateLogBinSpec(r: number, n: number): BinSpec;

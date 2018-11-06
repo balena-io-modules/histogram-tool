@@ -1,10 +1,13 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const bin_spec_1 = require("./bin-spec");
 class Histogram {
+    // can take either a BinSpec or a number[] representing right endpoints
+    // for bins
     constructor(spec) {
-        // sort BinSpec.list just in case and (needed for proper data insertion)
-        spec.list.sort((a, b) => a.x - b.x);
-        this.spec = spec;
+        // handle type union for `spec` param (idempotent if argument is already
+        // of Binspec type)
+        this.spec = bin_spec_1.BinSpec.fromBuckets(spec);
         this.clear();
         this.isCumulative = false;
         this.isNormalized = false;

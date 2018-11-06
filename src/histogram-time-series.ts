@@ -10,31 +10,33 @@ export class HistogramTimeSeries {
 	// timestamp
 	list : object
 	// the number of seconds per bucket in the series
-	nSecs : number
+	windowSecs : number
 	// the bin spec to use in constructing histograms for each time bucket
 	spec : BinSpec
-	constructor(nSecs : number, spec : BinSpec) {
+	constructor(windowSecs : number, spec : BinSpec | number[]) {
 		this.list = {};
-		this.nSecs = nSecs;
-		this.spec = spec;
+		this.windowSecs = windowSecs;
+		// handle type union for `spec` param (idempotent if argument is already
+		// of Binspec type)
+		this.spec = BinSpec.fromBuckets(spec);
 	}
 	// get the current ExportableTimeBucket's Histogram 
 	// (using TimeBucket.currentTimeStamp() to get the timestamp to use as an
 	// index)
 	currentHistogram() : Histogram {
-		let currentStart = TimeBucket.currentTimeStamp(this.nSecs);
+		let currentStart = TimeBucket.currentTimeStamp(this.windowSecs);
 		if (!this.list[currentStart]) {
 			this.list[currentStart] = new ExportableTimeBucket(currentStart, this.spec);
 		}
 		return this.list[currentStart].hist;
 	}
 	// whether a given bucket can be exported. Criteria:
-	// - is not the time bucket for the current period (according to nSecs)
+	// - is not the time bucket for the current period (according to windowSecs)
 	// - has `pending == 0`
 	// - has `exporting == false`
 	// - has `exported == false`
 	canExportBucket(bucket : ExportableTimeBucket) : boolean {
-		return (bucket.start != TimeBucket.currentTimeStamp(this.nSecs) && 
+		return (bucket.start != TimeBucket.currentTimeStamp(this.windowSecs) && 
 			bucket.pending == 0 && 
 			!bucket.exporting &&
 			!bucket.exported);
@@ -57,12 +59,12 @@ export class HistogramTimeSeries {
 	// returns a promise that resolves when all `exportFunc` calls have either
 	// resolved or rejected, resolving with the value equal to the numbe of
 	// buckets that were successfully exported
-	scan = (exportFunc : (hist: Histogram) => Promise<any>) : Promise<any> => {
+	scan = (exportFunc : (timestamp : number, hist: Histogram) => Promise<any>) : Promise<any> => {
 		return Promise.all(
 			Object.values(this.list).map(bucket => {
 				if (this.canExportBucket(bucket)) {
 					bucket.exporting = true;
-					return exportFunc(bucket.hist)
+					return exportFunc(bucket.start, bucket.hist)
 						.then(() => {
 							bucket.exported = true;
 							return true;
