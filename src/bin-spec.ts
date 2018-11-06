@@ -12,6 +12,11 @@ export class BinSpec {
 	}
 }
 
+export function binSpecFromBuckets (buckets : number[]) : BinSpec {
+	buckets.sort();
+	return new BinSpec(`fromBuckets-${buckets}`, buckets.map(x => ({ x })));
+}
+
 export function generateLogBinSpec (r : number, n : number) : BinSpec {
 	let spec = {
 		id: `generated-r-${r}-n-${n}`,

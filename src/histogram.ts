@@ -9,7 +9,11 @@ export class Histogram {
 	//
 	// 		[0, 20), [20, 50), [50, 100), [100, 200), [200, 1000), [1000, inf)
 	spec : BinSpec 
-	// `bins` holds integer frequency counts of data points within cutoff values
+	// `bins` hold numbers:
+	// - frequency of sample points in that bin by default
+	// - cumulative frequency if isCumulative
+	// - proportion if isNormalized
+	// - proportion less than right endpoint if isCumulative and isNormalized
 	bins : number[]
 	// total number of data points (used for normalization)
 	total : number
