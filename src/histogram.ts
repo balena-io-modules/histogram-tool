@@ -8,23 +8,23 @@ export class Histogram {
 	// we have bins:
 	//
 	// 		[0, 20), [20, 50), [50, 100), [100, 200), [200, 1000), [1000, inf)
-	spec : BinSpec 
+	spec: BinSpec
 	// `bins` hold numbers:
 	// - frequency of sample points in that bin by default
 	// - cumulative frequency if isCumulative
 	// - proportion if isNormalized
 	// - proportion less than right endpoint if isCumulative and isNormalized
-	bins : number[]
+	bins: number[]
 	// total number of data points (used for normalization)
-	total : number
+	total: number
 	// predicates set by the cumulative() and normalized() methods (allows
 	// code receiving a histogram to know if it needs to transform it)
-	isCumulative : boolean
-	isNormalized : boolean
+	isCumulative: boolean
+	isNormalized: boolean
 
 	// can take either a BinSpec or a number[] representing right endpoints
 	// for bins
-	constructor (spec : BinSpec | number[]) {
+	constructor(spec: BinSpec | number[]) {
 		// handle type union for `spec` param (idempotent if argument is already
 		// of Binspec type)
 		this.spec = BinSpec.fromBuckets(spec);
@@ -35,10 +35,10 @@ export class Histogram {
 
 	// add a sample point to the histogram (increase the count of the appropriate
 	// bin)
-	addSamplePoint(x : number) {
-		let i = 0; 
+	addSamplePoint(x: number) {
+		let i = 0;
 		while (i < this.spec.list.length &&
-				x >= this.spec.list[i].x) {
+			x >= this.spec.list[i].x) {
 			i++;
 		}
 		this.bins[i]++;
@@ -52,7 +52,7 @@ export class Histogram {
 	}
 
 	// create a copy of this histogram
-	clone() : Histogram {
+	clone(): Histogram {
 		let clone = new Histogram(this.spec);
 		clone.bins = this.bins.slice(); // .slice() makes a copy
 		clone.total = this.total;
@@ -63,7 +63,7 @@ export class Histogram {
 
 	// fill this.cumulativeBins, each bin's number being the sum of itself and
 	// all lower bins
-	cumulative() : Histogram {
+	cumulative(): Histogram {
 		let clone = this.clone();
 		let runningTotal = 0;
 		for (let i = 0; i < clone.bins.length; i++) {
@@ -75,15 +75,14 @@ export class Histogram {
 	}
 
 	// normalize the bin coutns (make them percentages of the total count)
-	normalized() : Histogram {
+	normalized(): Histogram {
 		let clone = this.clone();
+		if (clone.total > 0) {
+			// guard against division by zero in the for loop after this if	
+			clone.total = 1.0;
+		}
 		for (let i = 0; i < clone.bins.length; i++) {
 			clone.bins[i] = clone.bins[i] / clone.total;
-		}
-		// we want to preserve total === 0 if it is 0, so clone
-		// anything processing clone histogram can know it's empty
-		if (clone.total > 0) {
-			clone.total = 1.0;
 		}
 		clone.isNormalized = true;
 		return clone;

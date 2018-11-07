@@ -1,14 +1,14 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const histogram_1 = require("./histogram");
+// used to keep track of a slice of time in which events can start - allowing us
+// to react when all those events have ended and the time period is past
 class TimeBucket {
-    constructor(start, spec) {
-        this.start = start;
+    constructor(time) {
+        this.time = time;
         this.pending = 0;
-        this.hist = new histogram_1.Histogram(spec);
     }
     toString() {
-        return `${this.start}`;
+        return `${this.time}`;
     }
     // return the timestamp of the time bucket we are in at the time this function
     // is called.
@@ -18,19 +18,9 @@ class TimeBucket {
     // - 1541461200
     // - 1541461260
     // )
-    static currentTimeStamp(windowSecs) {
-        return Math.floor(new Date().getTime() / 1000 / windowSecs) * windowSecs;
+    static currentTime(windowSecs) {
+        return Math.floor(Date.now() / 1000 / windowSecs) * windowSecs;
     }
 }
 exports.TimeBucket = TimeBucket;
-// a time bucket which can be exported
-class ExportableTimeBucket extends TimeBucket {
-    constructor(start, spec) {
-        super(start, spec);
-        this.attempts = 0;
-        this.exporting = false;
-        this.exported = false;
-    }
-}
-exports.ExportableTimeBucket = ExportableTimeBucket;
 //# sourceMappingURL=time-bucket.js.map

@@ -52,13 +52,12 @@ class Histogram {
     // normalize the bin coutns (make them percentages of the total count)
     normalized() {
         let clone = this.clone();
+        if (clone.total > 0) {
+            // guard against division by zero in the for loop after this if	
+            clone.total = 1.0;
+        }
         for (let i = 0; i < clone.bins.length; i++) {
             clone.bins[i] = clone.bins[i] / clone.total;
-        }
-        // we want to preserve total === 0 if it is 0, so clone
-        // anything processing clone histogram can know it's empty
-        if (clone.total > 0) {
-            clone.total = 1.0;
         }
         clone.isNormalized = true;
         return clone;

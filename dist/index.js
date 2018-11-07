@@ -4,8 +4,9 @@ function __export(m) {
 }
 Object.defineProperty(exports, "__esModule", { value: true });
 __export(require("./bin-spec"));
+__export(require("./exportable-time-series"));
+__export(require("./exporters"));
 __export(require("./histogram"));
-__export(require("./histogram-time-series"));
 __export(require("./percentile-spec"));
 __export(require("./slo-reactor"));
 __export(require("./spec-loader-strategies"));
