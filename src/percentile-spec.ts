@@ -1,4 +1,4 @@
-import { BinSpec } from '.';
+import { BinSpec } from './bin-spec';
 
 export interface Percentile {
 	// (eg. 0.9 for 90th percentile)

@@ -1,6 +1,8 @@
-import { Histogram } from '../src/histogram';
-import { PercentileSpec } from '../src/percentile-spec';
-import { SLOReactor } from '../src/slo-reactor';
+import {
+	Histogram,
+	PercentileSpec,
+	SLOReactor
+} from '../src';
 
 import { expect } from 'chai';
 import 'mocha';

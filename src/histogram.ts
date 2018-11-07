@@ -1,4 +1,5 @@
-import { BinSpec, PercentileSpec } from '.';
+import { BinSpec } from './bin-spec';
+import { PercentileSpec } from './percentile-spec';
 
 export class Histogram {
 	// bins are defined by their left limit, for example:

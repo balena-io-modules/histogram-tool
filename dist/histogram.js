@@ -2,19 +2,19 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const bin_spec_1 = require("./bin-spec");
 class Histogram {
-    // can take either a BinSpec or a number[] representing right endpoints
-    // for bins
+    // can take either a BinSpec, PercentileSpec, or a number[] representing 
+    // right endpoints for bins
     constructor(spec) {
         // handle type union for `spec` param (idempotent if argument is already
         // of Binspec type)
-        this.spec = bin_spec_1.BinSpec.fromBuckets(spec);
+        this.spec = bin_spec_1.BinSpec.fromUnion(spec);
         this.clear();
         this.isCumulative = false;
         this.isNormalized = false;
     }
     // add a sample point to the histogram (increase the count of the appropriate
     // bin)
-    addSamplePoint(x) {
+    observe(x) {
         let i = 0;
         while (i < this.spec.list.length &&
             x >= this.spec.list[i].x) {
@@ -52,12 +52,11 @@ class Histogram {
     // normalize the bin coutns (make them percentages of the total count)
     normalized() {
         let clone = this.clone();
-        if (clone.total > 0) {
-            // guard against division by zero in the for loop after this if	
-            clone.total = 1.0;
-        }
-        for (let i = 0; i < clone.bins.length; i++) {
-            clone.bins[i] = clone.bins[i] / clone.total;
+        // avoid division by 0
+        if (clone.total != 0) {
+            for (let i = 0; i < clone.bins.length; i++) {
+                clone.bins[i] = clone.bins[i] / clone.total;
+            }
         }
         clone.isNormalized = true;
         return clone;

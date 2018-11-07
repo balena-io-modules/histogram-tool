@@ -1,5 +1,5 @@
-import { PercentileSpec } from './percentile-spec';
 import { Histogram } from './histogram';
+import { PercentileSpec } from './percentile-spec';
 export declare class SLOReactor {
     failReactions: Function[][];
     passReactions: Function[][];

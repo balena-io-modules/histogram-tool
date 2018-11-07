@@ -1,4 +1,4 @@
-import { Percentile, PercentileSpec } from '.';
+import { Percentile, PercentileSpec } from './percentile-spec';
 
 export interface Bin {
 	// (eg. the right-cutoff of the bin)

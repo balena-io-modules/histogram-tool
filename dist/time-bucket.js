@@ -13,13 +13,13 @@ class TimeBucket {
     // return the timestamp of the time bucket we are in at the time this function
     // is called.
     // (for example, if windowSecs = 60, that might be any one of:
-    // - 1541461080
-    // - 1541461140
-    // - 1541461200
-    // - 1541461260
+    // - 1541461080000
+    // - 1541461140000
+    // - 1541461200000
+    // - 1541461260000
     // )
     static currentTime(windowSecs) {
-        return Math.floor(Date.now() / 1000 / windowSecs) * windowSecs;
+        return Math.floor(Date.now() / (1000 * windowSecs)) * (1000 * windowSecs);
     }
 }
 exports.TimeBucket = TimeBucket;

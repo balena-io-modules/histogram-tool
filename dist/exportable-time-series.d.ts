@@ -17,5 +17,5 @@ export declare class ExportableTimeSeries<T extends Exportable> {
     current(): ExportableTimeBucket<T>;
     canExportBucket(bucket: ExportableTimeBucket<T>): boolean;
     prune: () => Promise<void>;
-    scan: () => Promise<any>;
+    scan: () => Promise<number>;
 }

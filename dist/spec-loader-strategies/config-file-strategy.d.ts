@@ -1,4 +1,4 @@
-import { PercentileSpec } from '../percentile-spec';
+import { PercentileSpec } from '..';
 interface ConfigFileStrategyOptions {
     file: string;
 }

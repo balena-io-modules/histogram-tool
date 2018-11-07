@@ -9,4 +9,3 @@ export declare class PercentileSpec {
     constructor(id: string, list: Percentile[]);
     toBinSpec(): BinSpec;
 }
-export declare function generateLogPercentileSpec(r: number, n: number): PercentileSpec;

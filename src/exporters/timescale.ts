@@ -1,10 +1,10 @@
 import * as pg from 'pg';
 import * as pgFormat from 'pg-format';
-import { Histogram } from '../histogram';
+import { Histogram } from '..';
 
 // exports a histogram to timescale given a client - assumes a particular table
 // structure.
-export timescaleExporter = (client: pg.Client, timestamp: number, metricName: string, hist: Histogram): Promise<any> {
+export function timescaleExporter(client: pg.Client, timestamp: number, metricName: string, hist: Histogram): Promise<any> {
 	// convert timestamp to iso-8601 
 	let time = new Date(timestamp).toISOString();
 	const job = 'api';

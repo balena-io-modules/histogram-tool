@@ -45,7 +45,7 @@ class ExportableTimeSeries {
         // returns a promise that resolves when all `doExport()` calls have either
         // resolved or rejected, resolving with the value equal to the number of
         // buckets that were successfully exported
-        this.scan = () => {
+        this.scan = () => __awaiter(this, void 0, void 0, function* () {
             return Promise.all(Object.values(this.buckets)
                 .map((bucket) => __awaiter(this, void 0, void 0, function* () {
                 if (!this.canExportBucket(bucket)) {
@@ -69,7 +69,7 @@ class ExportableTimeSeries {
             }))).then((arr) => {
                 return arr.reduce((accum, x) => accum + (x ? 1 : 0), 0);
             });
-        };
+        });
         this.buckets = new Map();
         this.windowSecs = windowSecs;
         this.blankExportable = blankExportable;

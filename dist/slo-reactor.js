@@ -19,11 +19,9 @@ class SLOReactor {
                     `id: ${hist.spec.id}, while this reactor has ` +
                     `PercentileSpec id: ${this.spec.id}`);
             }
-            // make cumulative and normalize
-            hist = hist.cumulative().normalized();
             // compare bin percentages with the percentile they represent
             for (let i = 0; i < this.spec.list.length; i++) {
-                let reactionList;
+                let reactions;
                 // by default, an empty histogram means no requests, so we're
                 // meeting the SLO if that happens (otherwise, we pass when
                 // the percentage of requests less than the given percentile (the
@@ -31,12 +29,16 @@ class SLOReactor {
                 // or equal to the percentile's definition (eg. 0.9))
                 if (hist.total === 0 ||
                     hist.bins[i] >= this.spec.list[i].p) {
-                    reactionList = this.passReactions;
+                    reactions = this.passReactions[i];
                 }
                 else {
-                    reactionList = this.failReactions;
+                    reactions = this.failReactions[i];
                 }
-                reactionList[i].map(f => f(this.spec.list[i], hist.bins[i]));
+                for (let reaction of reactions) {
+                    const p = this.spec.list[i];
+                    const observed = hist.bins[i];
+                    reaction(p, observed);
+                }
             }
         };
         // sort spec just in case - we need them in sorted order

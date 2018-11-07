@@ -1,5 +1,5 @@
-import { PercentileSpec } from './percentile-spec';
 import { BinSpec } from './bin-spec';
+import { PercentileSpec } from './percentile-spec';
 export interface PercentileSpecLoaderStrategy {
     load: (options: object) => PercentileSpec;
 }

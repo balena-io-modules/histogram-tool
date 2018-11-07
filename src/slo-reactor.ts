@@ -1,4 +1,5 @@
-import { Histogram, PercentileSpec } from '.';
+import { Histogram } from './histogram';
+import { PercentileSpec } from './percentile-spec';
 
 export class SLOReactor {
 	// `failReactions` and `passReactions` are lists of lists of functions where
