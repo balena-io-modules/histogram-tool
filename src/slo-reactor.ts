@@ -1,5 +1,4 @@
-import { PercentileSpec } from './percentile-spec';
-import { Histogram } from './histogram';
+import { Histogram, PercentileSpec } from '.';
 
 export class SLOReactor {
 	// `failReactions` and `passReactions` are lists of lists of functions where
@@ -34,12 +33,12 @@ export class SLOReactor {
 	// (percentile : Percentile, observed : number)
 	//
 	// ... where `observed` is the observed
-	failReactions : Function[][]
-	passReactions : Function[][]
+	failReactions: Function[][]
+	passReactions: Function[][]
 	// the percentiles this reactor will react to 
-	spec : PercentileSpec
+	spec: PercentileSpec
 
-	constructor (spec: PercentileSpec) {
+	constructor(spec: PercentileSpec) {
 		// sort spec just in case - we need them in sorted order
 		spec.list.sort((a, b) => a.p - b.p);
 		this.spec = spec;
@@ -51,26 +50,26 @@ export class SLOReactor {
 
 	// add a reaction to the given list (will be either this.failReactions or
 	// this.passReactions)
-	private addReaction (reactionList : Function[][], percentile : number, f : Function) {
+	private addReaction(reactionList: Function[][], percentile: number, f: Function) {
 		// find the index of this percentile in the list
 		let index = this.spec.list.map(spec => spec.p).indexOf(percentile);
 		reactionList[index].push(f);
 	}
 
 	// add a fail reaction for the given percentile
-	addFailReaction (percentile : number, f : Function) {
+	addFailReaction(percentile: number, f: Function) {
 		this.addReaction(this.failReactions, percentile, f);
 	}
 
 	// add a pass reaction for the given percentile
-	addPassReaction (percentile : number, f : Function) {
+	addPassReaction(percentile: number, f: Function) {
 		this.addReaction(this.passReactions, percentile, f);
 	}
 
 	// check if a histogram violates the SLO defined by the `spec` object
 	// used to construct this SLOReactor, taking actions defined in 
 	// `this.reactions` if so
-	reactTo = (hist : Histogram) => {
+	reactTo = (hist: Histogram) => {
 		// make cumulative and normalized if needed
 		if (!hist.isCumulative) {
 			hist = hist.cumulative();
@@ -81,14 +80,12 @@ export class SLOReactor {
 		// check that the spec is the same for the incoming histogram
 		if (hist.spec.id !== this.spec.id) {
 			throw new Error(`asked to react to histogram with BinSpec` +
-					`id: ${hist.spec.id}, while this reactor has ` +
-					`PercentileSpec id: ${this.spec.id}`);
+				`id: ${hist.spec.id}, while this reactor has ` +
+				`PercentileSpec id: ${this.spec.id}`);
 		}
-		// make cumulative and normalize
-		hist = hist.cumulative().normalized();
 		// compare bin percentages with the percentile they represent
 		for (let i = 0; i < this.spec.list.length; i++) {
-			let reactionList : Function[][];
+			let reactions: Function[];
 			// by default, an empty histogram means no requests, so we're
 			// meeting the SLO if that happens (otherwise, we pass when
 			// the percentage of requests less than the given percentile (the
@@ -96,13 +93,15 @@ export class SLOReactor {
 			// or equal to the percentile's definition (eg. 0.9))
 			if (hist.total === 0 ||
 				hist.bins[i] >= this.spec.list[i].p) {
-				reactionList = this.passReactions;
+				reactions = this.passReactions[i];
 			} else {
-				reactionList = this.failReactions;
+				reactions = this.failReactions[i];
 			}
-			reactionList[i].map(f => 
-				f(this.spec.list[i], hist.bins[i])
-			);
+			for (let reaction of reactions) {
+				const p = this.spec.list[i];
+				const observed = hist.bins[i];
+				reaction(p, observed);
+			}
 		}
 	}
 }

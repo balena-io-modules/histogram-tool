@@ -1,4 +1,4 @@
-import { BinSpec } from './bin-spec';
+import { BinSpec, PercentileSpec } from '.';
 
 export class Histogram {
 	// bins are defined by their left limit, for example:
@@ -22,12 +22,12 @@ export class Histogram {
 	isCumulative: boolean
 	isNormalized: boolean
 
-	// can take either a BinSpec or a number[] representing right endpoints
-	// for bins
-	constructor(spec: BinSpec | number[]) {
+	// can take either a BinSpec, PercentileSpec, or a number[] representing 
+	// right endpoints for bins
+	constructor(spec: BinSpec | PercentileSpec | number[]) {
 		// handle type union for `spec` param (idempotent if argument is already
 		// of Binspec type)
-		this.spec = BinSpec.fromBuckets(spec);
+		this.spec = BinSpec.fromUnion(spec);
 		this.clear();
 		this.isCumulative = false;
 		this.isNormalized = false;
@@ -35,7 +35,7 @@ export class Histogram {
 
 	// add a sample point to the histogram (increase the count of the appropriate
 	// bin)
-	addSamplePoint(x: number) {
+	observe(x: number) {
 		let i = 0;
 		while (i < this.spec.list.length &&
 			x >= this.spec.list[i].x) {
@@ -77,15 +77,13 @@ export class Histogram {
 	// normalize the bin coutns (make them percentages of the total count)
 	normalized(): Histogram {
 		let clone = this.clone();
-		if (clone.total > 0) {
-			// guard against division by zero in the for loop after this if	
-			clone.total = 1.0;
-		}
-		for (let i = 0; i < clone.bins.length; i++) {
-			clone.bins[i] = clone.bins[i] / clone.total;
+		// avoid division by 0
+		if (clone.total != 0) {
+			for (let i = 0; i < clone.bins.length; i++) {
+				clone.bins[i] = clone.bins[i] / clone.total;
+			}
 		}
 		clone.isNormalized = true;
 		return clone;
-
 	}
 }

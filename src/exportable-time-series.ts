@@ -90,7 +90,7 @@ export class ExportableTimeSeries<T extends Exportable> {
 	// returns a promise that resolves when all `doExport()` calls have either
 	// resolved or rejected, resolving with the value equal to the number of
 	// buckets that were successfully exported
-	scan = (): Promise<any> => {
+	scan = async () => {
 		return Promise.all(
 			Object.values(this.buckets)
 				.map(async (bucket) => {

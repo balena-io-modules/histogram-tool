@@ -1,11 +1,11 @@
 import { Histogram } from '../src/histogram';
-import { HistogramAccumulator } from '../src/histogram-accumulator';
 import { PercentileSpec } from '../src/percentile-spec';
 import { SLOReactor } from '../src/slo-reactor';
 
 import { expect } from 'chai';
 import 'mocha';
 
+// 90 % below 100
 const percentiles = new PercentileSpec(
 	'test-spec',
 	[
@@ -21,70 +21,38 @@ const t = 0.1;
 
 describe('SLOReactor', () => {
 
-	it('should fail a failing distribution', (done) => {
-		new Promise((resolve, reject) => {
-			let histAccum = new HistogramAccumulator(t, percentiles);
-			let sloReactor = new SLOReactor(percentiles);
-			histAccum.start();
-			for (let i = 0; i < 20; i++) {
-				histAccum.addSamplePoint(101);
-			}
-			for (let i = 0; i < 80; i++) {
-				histAccum.addSamplePoint(99);
-			}
-			histAccum.emitter.on('histogram', (hist) => {
-				sloReactor.reactTo(hist);
-				histAccum.stop();
-			});
-			sloReactor.addFailReaction(percentiles.list[0].p, () => {
-				resolve();
-			});
-			setTimeout(() => {
-				reject(new Error('failed to call fail callback'));
-			}, t * 1.5 * 1000);
-		}).then(done).catch(done);
-	});
-		
-	it('should pass a passing distribution', (done) => {
-		new Promise((resolve, reject) => {
-			let histAccum = new HistogramAccumulator(t, percentiles);
-			let sloReactor = new SLOReactor(percentiles);
-			histAccum.start();
-			for (let i = 0; i < 5; i++) {
-				histAccum.addSamplePoint(101);
-			}
-			for (let i = 0; i < 95; i++) {
-				histAccum.addSamplePoint(99);
-			}
-			histAccum.emitter.on('histogram', (hist) => {
-				sloReactor.reactTo(hist);
-				histAccum.stop();
-			});
-			sloReactor.addPassReaction(percentiles.list[0].p, () => {
-				resolve();
-			});
-			setTimeout(() => {
-				reject(new Error('failed to call pass callback'));
-			}, t * 1.5 * 1000);
-		}).then(done).catch(done);
+	it('should pass/fail when passing/failing', () => {
+		// create SLOReactor expecting fail
+		let sloReactor = new SLOReactor(percentiles);
+		sloReactor.addPassReaction(0.9, () => {
+			throw new Error('failing SLO marked as passing');
+		});
+		let hist = new Histogram(percentiles);
+		for (let i = 0; i < 80; i++) {
+			hist.observe(99);
+		}
+		for (let i = 0; i < 20; i++) {
+			hist.observe(101);
+		}
+		sloReactor.reactTo(hist);
+		// create new SLOReactor expecting pass
+		sloReactor = new SLOReactor(percentiles);
+		sloReactor.addFailReaction(0.9, () => {
+			throw new Error('passing SLO marked as failing');
+		});
+		for (let i = 0; i < 200; i++) {
+			hist.observe(99);
+		}
+		sloReactor.reactTo(hist);
 	});
 
-	it('should pass an empty distribution', (done) => {
-		new Promise((resolve, reject) => {
-			let histAccum = new HistogramAccumulator(t, percentiles);
-			let sloReactor = new SLOReactor(percentiles);
-			histAccum.start();
-			histAccum.emitter.on('histogram', (hist) => {
-				sloReactor.reactTo(hist);
-				histAccum.stop();
-			});
-			sloReactor.addPassReaction(percentiles.list[0].p, () => {
-				resolve();
-			});
-			setTimeout(() => {
-				reject(new Error('failed to call pass callback'));
-			}, t * 1.5 * 1000);
-		}).then(done).catch(done);
+	it('should pass an empty histogram', () => {
+		let sloReactor = new SLOReactor(percentiles);
+		let hist = new Histogram(percentiles);
+		sloReactor.addFailReaction(0.9, () => {
+			throw new Error('passing SLO marked as failing');
+		});
+		sloReactor.reactTo(hist);
 	});
 
 	it('should throw error if percentile spec different', () => {
