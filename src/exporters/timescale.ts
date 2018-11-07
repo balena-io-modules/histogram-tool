@@ -31,6 +31,7 @@ export class TimescaleExporter {
 		const countQuery = pgFormat(`INSERT INTO
 			${metricName}_count(time, count, le, job) 
 			VALUES %L;`, countValues);
+		console.log(bucketQuery);
 		// issue the queries
 		return Promise.all([
 			client.query(bucketQuery),

@@ -55,6 +55,7 @@ class ExportableTimeSeries {
                 try {
                     yield bucket.exportableObject.doExport(bucket.time);
                     bucket.exported = true;
+                    delete this.buckets[bucket.time];
                     return true;
                 }
                 catch (err) {

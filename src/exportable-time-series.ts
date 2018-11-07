@@ -101,6 +101,7 @@ export class ExportableTimeSeries<T extends Exportable> {
 					try {
 						await bucket.exportableObject.doExport(bucket.time)
 						bucket.exported = true;
+						delete this.buckets[bucket.time];
 						return true;
 					} catch (err) {
 						console.error(err.stack);
