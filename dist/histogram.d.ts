@@ -7,7 +7,7 @@ export declare class Histogram {
     isCumulative: boolean;
     isNormalized: boolean;
     constructor(spec: BinSpec | PercentileSpec | number[]);
-    observe(x: number): void;
+    recordValue(x: number): void;
     clear(): void;
     clone(): Histogram;
     cumulative(): Histogram;

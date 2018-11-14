@@ -17,38 +17,38 @@ describe('Histogram', () => {
 	it('should add data points to the right bins', () => {
 		const hist = new Histogram(percentiles);
 		// add sample points and check which bins they fall in
-		hist.observe(3);
+		hist.recordValue(3);
 		expect(hist.bins[0]).to.equal(1);
-		hist.observe(32);
-		hist.observe(99);
+		hist.recordValue(32);
+		hist.recordValue(99);
 		expect(hist.bins[1]).to.equal(2);
-		hist.observe(100);
-		hist.observe(150);
-		hist.observe(199);
+		hist.recordValue(100);
+		hist.recordValue(150);
+		hist.recordValue(199);
 		expect(hist.bins[2]).to.equal(3);
-		hist.observe(200);
-		hist.observe(300);
-		hist.observe(1000);
-		hist.observe(30000);
+		hist.recordValue(200);
+		hist.recordValue(300);
+		hist.recordValue(1000);
+		hist.recordValue(30000);
 		expect(hist.bins[3]).to.equal(4);
 	});
 
 	it('should make cumulative properly', () => {
 		let hist = new Histogram(percentiles);
 		// bin 0
-		hist.observe(3);
+		hist.recordValue(3);
 		// bin 1
-		hist.observe(32);
-		hist.observe(99);
+		hist.recordValue(32);
+		hist.recordValue(99);
 		// bin 2
-		hist.observe(100);
-		hist.observe(150);
-		hist.observe(199);
+		hist.recordValue(100);
+		hist.recordValue(150);
+		hist.recordValue(199);
 		// bin 3
-		hist.observe(200);
-		hist.observe(300);
-		hist.observe(1000);
-		hist.observe(30000);
+		hist.recordValue(200);
+		hist.recordValue(300);
+		hist.recordValue(1000);
+		hist.recordValue(30000);
 		// make cumulative and check
 		hist = hist.cumulative();
 		expect(hist.bins[0]).to.equal(1);
@@ -60,11 +60,11 @@ describe('Histogram', () => {
 	it('should normalize properly', () => {
 		let hist = new Histogram(percentiles);
 		// bin 0
-		hist.observe(0);
+		hist.recordValue(0);
 		// bin 2
-		hist.observe(101);
+		hist.recordValue(101);
 		// bin 3
-		hist.observe(201);
+		hist.recordValue(201);
 		// normalize and check
 		hist = hist.normalized();
 		expect(hist.bins[0]).to.equal(1 / 3);

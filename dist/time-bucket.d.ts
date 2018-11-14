@@ -1,7 +1,10 @@
-export declare class TimeBucket {
-    time: number;
+export declare class TimeBucket<T> {
+    timestamp: number;
+    windowSecs: number;
+    o: T;
     pending: number;
-    constructor(time: number);
-    toString(): string;
-    static currentTime(windowSecs: number): number;
+    constructor(timestamp: number, windowSecs: number, o: T, pending?: number);
+    isComplete(): boolean;
+    isPast(): boolean;
+    static currentTimestamp(windowSecs: number): number;
 }

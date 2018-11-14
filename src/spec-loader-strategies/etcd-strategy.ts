@@ -1,15 +1,27 @@
-import { PercentileSpec } from '..';
-
+import { BinSpec, PercentileSpec } from '..';
 // TODO: import etcd module
 
-export let EtcdStrategy = {
-	load: function(options: object): PercentileSpec {
-		// validate redis connection info
+interface ConfigFileStrategyOptions {
+	file: string
+};
+
+export const EtcdStrategy = {
+	loadPercentileSpec: function(options): PercentileSpec {
+		// validate etcd connection info
 		// TODO
-		// try to read percentiles from redis 
+		// try to read percentiles from etcd 
 		// TODO	
 		let id = '';
 		let list = [];
 		return new PercentileSpec(id, list);
+	},
+	loadBinSpec: function(options): BinSpec {
+		// validate etcd connection info
+		// TODO
+		// try to read percentiles from etcd 
+		// TODO	
+		let id = '';
+		let list = [];
+		return new BinSpec(id, list);
 	}
 };

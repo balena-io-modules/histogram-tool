@@ -1,7 +1,7 @@
 {
-  "name": "percentile-monitor",
+  "name": "histogram-tool",
   "version": "1.0.0",
-  "description": "perform actions when more than x events in a time series are above the (100-x)th percentile in the configured percentile distribution",
+  "description": "build, analyze, export histograms",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
@@ -10,22 +10,25 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/resin-io-modules/percentile-monitor.git"
+    "url": "git+https://github.com/balena-io-modules/histogram-tool.git"
   },
   "keywords": [
-    "time-series"
+    "time-series",
+    "histogram"
   ],
   "author": "dt-rush <nickp@resin.io>",
   "bugs": {
-    "url": "https://github.com/resin-io-modules/percentile-monitor/issues"
+    "url": "https://github.com/balena-io-modules/histogram-tool/issues"
   },
-  "homepage": "https://github.com/resin-io-modules/percentile-monitor#readme",
+  "homepage": "https://github.com/balena-io-modules/histogram-tool#readme",
   "devDependencies": {
     "@types/chai": "^4.1.6",
     "@types/mocha": "^5.2.5",
     "@types/node": "^10.11.3",
     "chai": "^4.2.0",
-    "mocha": "^5.2.0"
+    "express": "^4.16.4",
+    "mocha": "^5.2.0",
+    "tdigest": "^0.1.1"
   },
   "dependencies": {
     "@types/promise.prototype.finally": "^2.0.2",

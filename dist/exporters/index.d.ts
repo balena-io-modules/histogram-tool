@@ -1,1 +1,1 @@
-export * from './timescale';
+export { timescale } from './timescale';

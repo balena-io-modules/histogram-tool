@@ -1,7 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 class PercentileSpec {
-    constructor(id, list) {
+    constructor(
+    // id so that different components know that they're operating on the same
+    // percentile spec
+    id, list) {
         this.id = id;
         this.list = list;
     }

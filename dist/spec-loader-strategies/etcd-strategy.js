@@ -1,16 +1,25 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const __1 = require("..");
-// TODO: import etcd module
+;
 exports.EtcdStrategy = {
-    load: function (options) {
-        // validate redis connection info
+    loadPercentileSpec: function (options) {
+        // validate etcd connection info
         // TODO
-        // try to read percentiles from redis 
+        // try to read percentiles from etcd 
         // TODO	
         let id = '';
         let list = [];
         return new __1.PercentileSpec(id, list);
+    },
+    loadBinSpec: function (options) {
+        // validate etcd connection info
+        // TODO
+        // try to read percentiles from etcd 
+        // TODO	
+        let id = '';
+        let list = [];
+        return new __1.BinSpec(id, list);
     }
 };
 //# sourceMappingURL=etcd-strategy.js.map

@@ -1,19 +1,19 @@
-import { PercentileSpec } from '..';
+import { BinSpec, PercentileSpec } from '..';
 import * as fs from 'fs';
 
 interface ConfigFileStrategyOptions {
 	file: string
 };
 
-export let ConfigFileStrategy = {
-	load: function(options: ConfigFileStrategyOptions): PercentileSpec {
-		// validate file
+export const ConfigFileStrategy = {
+	loadPercentileSpec: function(options: ConfigFileStrategyOptions): PercentileSpec {
 		let file = options.file;
-		if (file === undefined) {
-			throw new Error('new ConfigFileStrategy(options) wants ' +
-				'options to have .file');
-		}
 		let config = JSON.parse(fs.readFileSync(file).toString());
 		return new PercentileSpec(config.id, config.list);
+	},
+	loadBinSpec: function(options: ConfigFileStrategyOptions): BinSpec {
+		let file = options.file;
+		let config = JSON.parse(fs.readFileSync(file).toString());
+		return new BinSpec(config.id, config.list);
 	}
 };

@@ -31,10 +31,10 @@ describe('SLOReactor', () => {
 		});
 		let hist = new Histogram(percentiles);
 		for (let i = 0; i < 80; i++) {
-			hist.observe(99);
+			hist.recordValue(99);
 		}
 		for (let i = 0; i < 20; i++) {
-			hist.observe(101);
+			hist.recordValue(101);
 		}
 		sloReactor.reactTo(hist);
 		// create new SLOReactor expecting pass
@@ -43,7 +43,7 @@ describe('SLOReactor', () => {
 			throw new Error('passing SLO marked as failing');
 		});
 		for (let i = 0; i < 200; i++) {
-			hist.observe(99);
+			hist.recordValue(99);
 		}
 		sloReactor.reactTo(hist);
 	});

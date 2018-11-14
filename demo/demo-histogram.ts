@@ -1,13 +1,22 @@
 import { HistogramAccumulator, 
 	SLOReactor, 
-	PercentileSpec,
 	ConfigFileStrategy } from './src/index';
 
-// create the SLO spec, a histogram accumulator, and an SLO reactor
-let SLO = ConfigFileStrategy.load({file: 'demo_spec.json'});
-let accumWindow = 1;
-let histAccum = new HistogramAccumulator(accumWindow, SLO.toBinSpec());
-let sloReactor = new SLOReactor(SLO);
+// create SLOReactor to react to expected SLO (see `demo_spec.json`)
+let slo = ConfigFileStrategy.loadPercentileSpec({file: 'demo_spec.json'});
+let sloReactor = new SLOReactor(slo);
+class HistogramToReactorExporter {
+	hist: Histogram
+	constructor(hist: Histogram) {
+		this.hist = hist;
+	}
+	async doExport (timestamp: number, hist: Histogram) {
+
+	}
+}
+
+let nSecs = 10;
+let ets = new ExportableTimeSeries(nSecs, blankReactor);
 
 // add reactor functions to the reactor to handle failing or passing SLOs
 for (let percentile of SLO.list) {

@@ -1,9 +1,17 @@
 "use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const pgFormat = require("pg-format");
 // exports a histogram to timescale given a client - assumes a particular table
 // structure.
-function timescaleExporter(client, timestamp, metricName, hist) {
+exports.timescale = (client, timestamp, metricName, hist) => __awaiter(this, void 0, void 0, function* () {
     // convert timestamp to iso-8601 
     let time = new Date(timestamp).toISOString();
     const job = 'api';
@@ -35,7 +43,5 @@ function timescaleExporter(client, timestamp, metricName, hist) {
         client.query(bucketQuery),
         client.query(countQuery),
     ]);
-}
-exports.timescaleExporter = timescaleExporter;
-;
+});
 //# sourceMappingURL=timescale.js.map

@@ -1,8 +1,9 @@
-import { PercentileSpec } from '..';
+import { BinSpec, PercentileSpec } from '..';
 interface ConfigFileStrategyOptions {
     file: string;
 }
-export declare let ConfigFileStrategy: {
-    load: (options: ConfigFileStrategyOptions) => PercentileSpec;
+export declare const ConfigFileStrategy: {
+    loadPercentileSpec: (options: ConfigFileStrategyOptions) => PercentileSpec;
+    loadBinSpec: (options: ConfigFileStrategyOptions) => BinSpec;
 };
 export {};

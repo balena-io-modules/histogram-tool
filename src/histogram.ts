@@ -1,5 +1,6 @@
 import { BinSpec } from './bin-spec';
 import { PercentileSpec } from './percentile-spec';
+import * as hdr from 'hdr-histogram-js';
 
 export class Histogram {
 	// bins are defined by their left limit, for example:
@@ -36,7 +37,7 @@ export class Histogram {
 
 	// add a sample point to the histogram (increase the count of the appropriate
 	// bin)
-	observe(x: number) {
+	recordValue(x: number) {
 		let i = 0;
 		while (i < this.spec.list.length &&
 			x >= this.spec.list[i].x) {

@@ -14,7 +14,7 @@ class Histogram {
     }
     // add a sample point to the histogram (increase the count of the appropriate
     // bin)
-    observe(x) {
+    recordValue(x) {
         let i = 0;
         while (i < this.spec.list.length &&
             x >= this.spec.list[i].x) {

@@ -6,12 +6,12 @@ export interface Bin {
 }
 
 export class BinSpec {
-	id: string
-	list: Bin[]
-	constructor(id: string, list: Bin[]) {
-		this.id = id;
-		this.list = list;
-	}
+
+	constructor(
+		public id: string, 
+		public list: Bin[]
+	) {}
+
 	// used to allow code needing a BinSpec to take either an existing BinSpec, a 
 	// PercentileSpec, or simply a list of bucket endpoints (number[])
 	static fromUnion(arg: BinSpec | PercentileSpec | number[]): BinSpec {

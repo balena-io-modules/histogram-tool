@@ -8,14 +8,14 @@ export interface Percentile {
 }
 
 export class PercentileSpec {
-	// id so that different components know that they're operating on the same
-	// percentile spec
-	id: string
-	list: Percentile[]
-	constructor(id: string, list: Percentile[]) {
-		this.id = id;
-		this.list = list;
-	}
+	
+	constructor(
+		// id so that different components know that they're operating on the same
+		// percentile spec
+		public id: string, 
+		public list: Percentile[]
+	) {}
+
 	toBinSpec(): BinSpec {
 		return {
 			id: this.id,

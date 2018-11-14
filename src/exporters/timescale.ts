@@ -4,7 +4,7 @@ import { Histogram } from '..';
 
 // exports a histogram to timescale given a client - assumes a particular table
 // structure.
-export function timescaleExporter(client: pg.Client, timestamp: number, metricName: string, hist: Histogram): Promise<any> {
+export const timescale = async (client: pg.Client, timestamp: number, metricName: string, hist: Histogram) => {
 	// convert timestamp to iso-8601 
 	let time = new Date(timestamp).toISOString();
 	const job = 'api';
